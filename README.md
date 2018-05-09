@@ -12,3 +12,20 @@ vue-markdown: Not compatible with Babel 7, and project looks a bit dead
 
 Chosen: [markdown-it](https://github.com/markdown-it/markdown-it)
 Demo [here](https://markdown-it.github.io/)
+
+## TODO
+
+Add remaining fields:
+ - location
+ - picture upload
+ - points
+ - difficulty
+ - release date
+ - force unlock
+ - Number of allowed attempts?
+
+Add vue-router
+
+Call lambda that would add question to S3?
+
+Review style of Markdown preview (titles, ul/li, etc...)
