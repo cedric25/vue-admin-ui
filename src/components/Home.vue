@@ -1,6 +1,27 @@
 <template>
+
   <section class="section">
     <div class="container">
+
+      <div class="columns is-vcentered">
+        <div class="column has-text-centered">
+          <a class="link is-info">Questions</a>
+        </div>
+        <div class="column has-text-centered">
+          <a class="link is-info">Map</a>
+        </div>
+        <div class="column is-half has-text-centered">
+          <h3 class="title is-3">Hidden Tech Challenge</h3>
+        </div>
+        <div class="column has-text-centered">
+          <a class="link is-info">Leaderboard</a>
+        </div>
+        <div class="column has-text-centered">
+          <a class="link is-info">About</a>
+        </div>
+      </div>
+
+      <hr>
 
       <h1 class="title">
         Add a question
@@ -89,9 +110,6 @@
         </div>
       </div>
 
-      <!-- TODO Location, picture upload, points, difficulty, release date, force unlock -->
-      <!-- Later: Number of allowed attempts? -->
-
       <div class="field is-grouped" style="margin-top: 40px;">
         <div class="control">
           <button class="button is-link">Submit</button>
@@ -175,20 +193,3 @@
     },
   }
 </script>
-
-<style scoped>
-  h3 {
-    margin: 40px 0 0;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  a {
-    color: #42b983;
-  }
-</style>
