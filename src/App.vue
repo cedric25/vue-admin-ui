@@ -16,6 +16,8 @@
 </script>
 
 <style>
+  @import "../node_modules/highlightjs/styles/github-gist.css";
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

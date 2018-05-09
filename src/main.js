@@ -5,6 +5,7 @@ import App from './App.vue'
 
 Vue.config.productionTip = false
 
+Vue.component(Buefy.Input.name, Buefy.Input)
 Vue.component(Buefy.RadioButton.name, Buefy.RadioButton)
 Vue.component(Buefy.Field.name, Buefy.Field)
 

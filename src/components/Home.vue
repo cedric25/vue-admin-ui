@@ -7,17 +7,34 @@
       </h1>
 
       <div class="field">
-        <label class="label">Title</label>
+        <label class="label">Name</label>
         <div class="control">
           <input class="input is-rounded" type="text">
         </div>
       </div>
 
-      <div class="field">
-        <label class="label">Question</label>
-        <div class="control">
-          <!-- TODO Need Markdown here, qnd bigger input...-->
-          <input class="input is-rounded" type="text">
+      <div class="columns">
+        <div class="column">
+          <div class="field">
+            <label class="label">Question</label>
+            <div class="control">
+              <textarea
+                :value="question"
+                @input="updateMarkdownPreview"
+                class="textarea"
+                placeholder="Markdown supported"
+                rows="6"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="field">
+            <label class="label">Preview</label>
+            <div class="control">
+              <div v-html="compiledMarkdown"></div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -29,7 +46,7 @@
               v-for="type of questionTypes" :key="type.code"
               v-model="questionType"
               :native-value="type.code"
-              type="is-success"
+              type="is-link"
             >
               <span>
                 {{ type.label }}
@@ -49,34 +66,33 @@
       <div class="field" v-if="questionType === 'multiple-choices'">
         <label class="label">Possible choices</label>
         <div class="control">
-          <div class="level" v-for="(choice, index) of possibleChoices" :key="index">
-            <div class="level-left">
-              <div style="margin: 10px 15px 10px 5px;">
-                <input type="radio" name="choices" disabled>
-              </div>
-            </div>
-            <div class="level-item">
-              <input class="input is-rounded" type="text" v-model="choice.value" placeholder="Add another option...">
-            </div>
-          </div>
+          <b-field v-for="(choice, index) of possibleChoices" :key="index">
+            <b-radio-button
+              :native-value="index"
+              v-model="rightAnswer"
+              type="is-success"
+              :disabled="choice.value === ''"
+            >
+              <span>
+                 Right answer?
+              </span>
+            </b-radio-button>
+            <b-input
+              type="text"
+              v-model="choice.value"
+              placeholder="Add another option..."
+              rounded
+              expanded
+            >
+            </b-input>
+          </b-field>
         </div>
       </div>
 
-      <div class="field" v-if="questionType === 'multiple-choices'">
-        <label class="label">Right choice</label>
-        <div class="control">
-          <div class="level" v-for="(choice, index) of possibleChoices" :key="index" v-if="choice.value !== ''">
-            <div class="level-left">
-              <label class="radio">
-                <input type="radio" name="answer">
-                {{ choice.value }}
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- TODO Location, picture upload, points, difficulty, release date, force unlock -->
+      <!-- Later: Number of allowed attempts? -->
 
-      <div class="field is-grouped">
+      <div class="field is-grouped" style="margin-top: 40px;">
         <div class="control">
           <button class="button is-link">Submit</button>
         </div>
@@ -90,11 +106,29 @@
 </template>
 
 <script>
+  import debounce from 'lodash.debounce'
+  import markownIt from 'markdown-it'
+  import emoji from 'markdown-it-emoji'
+  import hljs from 'highlightjs'
+
+  const markown = markownIt({
+    highlight: function (str, lang) {
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return hljs.highlight(lang, str).value
+        } catch (err) {
+          console.log('Fail to highlight code snippet... Language:', lang)
+        }
+      }
+      return ''
+    }
+  }).use(emoji)
 
   export default {
     name: 'Home',
     data() {
       return {
+        question: '**Markdown** _supported_ with emojis 8-)',
         questionTypes: [
           {
             code: 'free-text',
@@ -111,20 +145,33 @@
         }, {
           value: '',
         }],
+        rightAnswer: null,
       }
+    },
+    computed: {
+      compiledMarkdown: function () {
+        return markown.render(this.question)
+      },
     },
     watch: {
       possibleChoices: {
         handler: function (val) {
-          console.log('toto', val)
           if (val[val.length - 1].value) {
             this.possibleChoices.push({value: ''})
           } else if (val.length > 1 && val[val.length - 1].value === '' && val[val.length - 2].value === '') {
             this.possibleChoices.splice(val.length - 1, 1)
           }
+          if (this.rightAnswer !== null && this.possibleChoices[this.rightAnswer].value === '') {
+            this.rightAnswer = null
+          }
         },
         deep: true
-      }
+      },
+    },
+    methods: {
+      updateMarkdownPreview: debounce(function (e) {
+        this.question = e.target.value
+      }, 300),
     },
   }
 </script>

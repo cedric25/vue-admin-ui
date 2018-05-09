@@ -10,6 +10,10 @@
   "dependencies": {
     "buefy": "^0.6.5",
     "bulma": "^0.7.1",
+    "highlightjs": "^9.10.0",
+    "lodash.debounce": "^4.0.8",
+    "markdown-it": "^8.4.1",
+    "markdown-it-emoji": "^1.4.0",
     "vue": "^2.5.16"
   },
   "devDependencies": {
