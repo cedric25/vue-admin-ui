@@ -110,6 +110,109 @@
         </div>
       </div>
 
+      <div class="field">
+        <label class="label">Points</label>
+        <div class="control">
+          <div class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <input class="input is-rounded" type="text">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Difficulty</label>
+        <div class="control">
+          <div class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <input class="input is-rounded" type="text">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="control">
+          <div class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <b-field label="Release date">
+                  <b-datepicker
+                    placeholder="Click to select..."
+                    icon="calendar-today"
+                    v-model="releaseDate"
+                    :min-date="minReleaseDate"
+                    :first-day-of-week="datePickerFirstDayOfWeek"
+                    :focused-date="new Date()"
+                  ></b-datepicker>
+                </b-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Unlocked by default?</label>
+        <div class="control">
+          <b-field>
+            <b-radio-button
+              v-model="isUnlocked"
+              :native-value="true"
+              type="is-link"
+            >
+              <span>
+                Yes
+              </span>
+            </b-radio-button>
+            <b-radio-button
+              v-model="isUnlocked"
+              :native-value="false"
+              type="is-link"
+            >
+              <span>
+                No
+              </span>
+            </b-radio-button>
+          </b-field>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Number of attempts</label>
+        <div class="control">
+          <div class="columns is-vcentered">
+            <div class="column is-narrow">
+              <b-input
+                type="number"
+                v-model="nbAttempts"
+                rounded
+              >
+              </b-input>
+            </div>
+            <div class="column is-narrow">
+              or
+            </div>
+            <div class="column">
+              <b-radio-button
+                :value="isUnlimitedAttempts"
+                :native-value="true"
+                type="is-link"
+              >
+                  <span>
+                    Unlimited
+                  </span>
+              </b-radio-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="field is-grouped" style="margin-top: 40px;">
         <div class="control">
           <button class="button is-link">Submit</button>
@@ -145,6 +248,8 @@
   export default {
     name: 'Home',
     data() {
+      const today = new Date()
+
       return {
         question: '**Markdown** _supported_ with emojis 8-)',
         questionTypes: [
@@ -164,11 +269,21 @@
           value: '',
         }],
         rightAnswer: null,
+        isUnlocked: false,
+
+        datePickerFirstDayOfWeek: 1,
+        releaseDate: null,
+        minReleaseDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1),
+
+        nbAttempts: '',
       }
     },
     computed: {
       compiledMarkdown: function () {
         return markown.render(this.question)
+      },
+      isUnlimitedAttempts() {
+        return this.nbAttempts === ''
       },
     },
     watch: {

@@ -5,9 +5,10 @@ import App from './App.vue'
 
 Vue.config.productionTip = false
 
+Vue.component(Buefy.Datepicker.name, Buefy.Datepicker)
+Vue.component(Buefy.Field.name, Buefy.Field)
 Vue.component(Buefy.Input.name, Buefy.Input)
 Vue.component(Buefy.RadioButton.name, Buefy.RadioButton)
-Vue.component(Buefy.Field.name, Buefy.Field)
 
 new Vue({
   render: h => h(App)

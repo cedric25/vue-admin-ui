@@ -16,6 +16,10 @@
 </script>
 
 <style>
+  /* Not necessary as buefy.css is imported in main.js */
+  /*@import "../node_modules/bulma/css/bulma.css";*/
+
+  /* Syntax highlithing for code snippets in Markdown */
   @import "../node_modules/highlightjs/styles/github-gist.css";
 
   #app {
