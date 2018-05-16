@@ -30,7 +30,7 @@
       <div class="field">
         <label class="label">Name</label>
         <div class="control">
-          <input class="input is-rounded" type="text">
+          <input class="input is-rounded" type="text" v-model="name">
         </div>
       </div>
 
@@ -57,6 +57,19 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <label class="label">(PNG or JPG)</label>
+      <div class="field">
+        <picture-input
+          @change="onPictureSelected"
+          width="250"
+          height="150"
+          buttonClass="button is-primary is-outlined"
+          removeButtonClass="button is-outlined"
+          :customStrings="fileUploadCustomTexts"
+          :removable="true"
+        />
       </div>
 
       <div class="field">
@@ -215,11 +228,15 @@
 
       <div class="field is-grouped" style="margin-top: 40px;">
         <div class="control">
-          <button class="button is-link">Submit</button>
+          <button class="button is-link" @click="submitQuestion">Submit</button>
         </div>
         <div class="control">
           <button class="button is-text">Cancel</button>
         </div>
+      </div>
+
+      <div class="level">
+        {{ questionJson }}
       </div>
 
     </div>
@@ -231,6 +248,7 @@
   import markownIt from 'markdown-it'
   import emoji from 'markdown-it-emoji'
   import hljs from 'highlightjs'
+  import PictureInput from 'vue-picture-input'
 
   const markown = markownIt({
     highlight: function (str, lang) {
@@ -247,11 +265,22 @@
 
   export default {
     name: 'Home',
+    components: {
+      PictureInput,
+    },
     data() {
       const today = new Date()
 
       return {
+        name: '',
+
         question: '**Markdown** _supported_ with emojis 8-)',
+
+        fileUploadCustomTexts: {
+          upload: '<h1>Bummer!</h1>',
+          drag: 'Drag your question picture here...'
+        },
+
         questionTypes: [
           {
             code: 'free-text',
@@ -276,6 +305,8 @@
         minReleaseDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1),
 
         nbAttempts: '',
+
+        questionJson: '',
       }
     },
     computed: {
@@ -305,6 +336,38 @@
       updateMarkdownPreview: debounce(function (e) {
         this.question = e.target.value
       }, 300),
+      submitQuestion() {
+        const json = {
+          name: this.name,
+          question: this.question,
+          questionType: this.questionType,
+          possibleChoices: this.possibleChoices,
+          rightAnswer: this.rightAnswer,
+          isUnlocked: this.isUnlocked,
+          releaseDate: this.releaseDate,
+          nbAttempts: this.nbAttempts,
+        }
+        this.questionJson = JSON.stringify(json)
+      },
+      onPictureSelected(image) {
+        console.log('New picture selected!')
+        if (image) {
+          console.log('Picture loaded.')
+          this.image = image
+        }
+      },
     },
   }
 </script>
+
+<style scoped>
+
+  .picture-input {
+    text-align: left !important;
+  }
+
+  .picture-input /deep/ .preview-container {
+    margin: 0;
+  }
+
+</style>

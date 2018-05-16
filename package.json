@@ -14,7 +14,8 @@
     "lodash.debounce": "^4.0.8",
     "markdown-it": "^8.4.1",
     "markdown-it-emoji": "^1.4.0",
-    "vue": "^2.5.16"
+    "vue": "^2.5.16",
+    "vue-picture-input": "^2.1.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.9",
